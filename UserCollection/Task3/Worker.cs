@@ -8,6 +8,9 @@ namespace Task3
 {
     class Worker:Citizen
     {
+        public Worker(int id) : base(id)
+        {
 
+        }
     }
 }

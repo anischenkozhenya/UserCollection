@@ -8,6 +8,9 @@ namespace Task3
 {
     class Student: Citizen
     {
+        public Student(int id) : base(id)
+        {
 
+        }
     }
 }

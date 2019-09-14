@@ -10,10 +10,11 @@ namespace Task3
     class UserCollection : IEnumerable, IEnumerator
     {
         Citizen[] citizens = new Citizen[0];
-        public int Count = 0;
+        private int count = 0;
+        public int Count { get { return count; } }
         int position = -1;
-        int pensionerLast = -1;
-        public object Current { get; }
+        int pensionerLast = 0;
+        public object Current { get { return citizens[position]; } }
         public IEnumerator GetEnumerator()
         {
             return this;
@@ -21,7 +22,7 @@ namespace Task3
 
         public bool MoveNext()
         {
-            if (position < citizens.Length)
+            if (position < citizens.Length-1)
             {
                 position++;
                 return true;
@@ -39,37 +40,59 @@ namespace Task3
         public void Add(Citizen citizen)
         {
             Citizen[] temp = citizens;
+            int number = 0;
             if (citizens.Length == 0)
             {
                 citizens = new Citizen[citizens.Length + 1];
                 citizens[citizens.Length - 1] = citizen;
+                number = citizens.Length - 1;
                 if (citizen.GetType().ToString() == typeof(Pensioner).ToString())
                 {
                     pensionerLast++;
                 }
-                Count++;
+                count++;
+                ShowAddCitizen(citizen, number);
             }
             else
             {
-                if (Method(citizen))
+                if (!Contains(citizen))
                 {
                     citizens = new Citizen[citizens.Length + 1];
                     if (citizen.GetType().ToString() == typeof(Pensioner).ToString())
                     {
-                        if (pensionerLast>=0)
+                        if (pensionerLast >= 1)
                         {
-                            Citizen[] before;
-                            Citizen[] after;
+                            Citizen[] before = new Citizen[pensionerLast];
+                            Citizen[] after = new Citizen[temp.Length - pensionerLast];
+                            for (int i = 0; i < pensionerLast; i++)
+                            {
+                                before[i] = temp[i];
+                            }
+                            for (int i = pensionerLast; i < after.Length + pensionerLast; i++)
+                            {
+                                after[i - pensionerLast] = temp[i];
+                            }
+                            for (int i = 0; i < before.Length; i++)
+                            {
+                                citizens[i] = before[i];
+                            }
+                            for (int i = 0; i < after.Length; i++)
+                            {
+                                citizens[i + pensionerLast + 1] = after[i];
+                            }
+                            citizens[pensionerLast] = citizen;
+                            number = pensionerLast;
                         }
                         else
                         {
-                            for (int i = 1; i < citizens.Length - 1; i++)
+                            for (int i = 1; i < citizens.Length; i++)
                             {
-                                citizens[i] = temp[i-1];
+                                citizens[i] = temp[i - 1];
                             }
                             citizens[0] = citizen;
+                            number = 0;
                         }
-                        Count++;
+                        count++;
                         pensionerLast++;
                     }
                     else
@@ -79,8 +102,10 @@ namespace Task3
                             citizens[i] = temp[i];
                         }
                         citizens[citizens.Length - 1] = citizen;
-                        Count++;
+                        number = citizens.Length - 1;
+                        count++;
                     }
+                    ShowAddCitizen(citizen, number);
                 }
                 else
                 {
@@ -90,25 +115,77 @@ namespace Task3
             }
         }
 
-        private bool Method(Citizen citizen)
+        internal string ReturnLast()
         {
-            for (int i = 0; i < citizens.Length; i++)
-            {
-                if (citizen.Id == citizens[i].Id)
-                {
-                    return false;
-                }
-            }
-            return true;
-
+            return count.ToString() + " " + citizens[count-2] + " "+ citizens[count-2].Id;
         }
 
-        public void Delete(Citizen citizen)
+        private void ShowAddCitizen(Citizen citizen, int number)
         {
-            if (citizen.GetType().ToString() == typeof(Pensioner).ToString())
+            number =number+1;
+            Console.WriteLine("Добавлен " + citizen.GetType().ToString() + " номер паспорта " + citizen.Id + " номер в списке " + number );
+
+        }
+        public void Delete()
+        {
+            Citizen[] temp = new Citizen[citizens.Length - 1];
+            for (int i = 1; i < citizens.Length; i++)
             {
-                Count--;
+                temp[i - 1] = citizens[i];
             }
+            citizens = temp;
+        }
+            public void Delete(Citizen citizen)
+        {
+            if (Contains(citizen))
+            {
+                int del = GetNumberCitizenInCollection(citizen);
+                Citizen[] temp = new Citizen[citizens.Length-1];
+                for (int i = 0; i < del; i++)
+                {
+                    temp[i] = citizens[i];
+                }
+                for (int i = del+1; i < citizens.Length; i++)
+                {
+                    temp[i-1] = citizens[i];
+                }
+                citizens = temp;
+            }
+            else
+            {
+                Console.WriteLine("Нельзя удалить пользователя которого нету в коллекции");
+            }
+        }      
+        public void Clear()
+        {
+            citizens = new Citizen[0];
+            count = 0;
+            pensionerLast = 0;
+        }
+        public bool Contains(Citizen citizen,out int number)
+        {
+            number = 0;
+            for (int i = 0; i < citizens.Length; i++)
+            {
+                number = i;
+                if (citizen.Equals(citizens[i]))
+                {
+                   return true;
+                }
+            }
+            return false;
+        }
+        public int GetNumberCitizenInCollection(Citizen citizen)
+        {
+            int number=0;
+            for (int i = 0; i < citizens.Length; i++)
+            {
+                if (citizens[i]==citizen)
+                {
+                    number = i;
+                }
+            }
+            return number;
         }
     }
 }

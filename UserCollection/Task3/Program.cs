@@ -30,10 +30,37 @@ namespace Task3
         {
             Random random = new Random();
             UserCollection userCollection = new UserCollection();
-            Student student = new Student();
-            Pensioner pensioner = new Pensioner();
-            userCollection.Add(student);
-            userCollection.Add(pensioner);
+            userCollection.Add(new Pensioner(random.Next()));
+            userCollection.Add(new Worker(random.Next()));
+            userCollection.Add(new Worker(random.Next()));
+            userCollection.Add(new Student(random.Next()));
+            userCollection.Add(new Student(random.Next()));
+            userCollection.Add(new Pensioner(random.Next()));
+            userCollection.Add(new Pensioner(random.Next()));
+            Worker worker = new Worker(1000);
+            userCollection.Add(worker);
+            userCollection.Add(new Worker(random.Next()));
+            userCollection.Add(new Student(random.Next()));
+            userCollection.Add(new Student(random.Next()));
+            userCollection.Add(new Pensioner(random.Next()));
+            userCollection.Add(new Pensioner(random.Next()));
+            userCollection.GetNumberCitizenInCollection(worker);
+            userCollection.Delete(worker);
+            userCollection.Add(new Student(1000));
+            foreach (var item in userCollection)
+            {
+                Console.WriteLine(item.GetType());
+            }
+            Console.WriteLine(userCollection.Contains(new Student(1000)));
+            Console.WriteLine(userCollection.ReturnLast());
+            Console.WriteLine(userCollection.Count);
+            userCollection.Clear();
+            foreach (var item in userCollection)
+            {
+                Console.WriteLine(item.GetType());
+            }
+            Console.WriteLine(userCollection.Count);            
+            Console.ReadKey();
         }
     }
 }

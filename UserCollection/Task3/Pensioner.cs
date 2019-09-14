@@ -8,6 +8,9 @@ namespace Task3
 {
     class Pensioner:Citizen
     {
+        public Pensioner(int id) : base(id)
+        {
 
+        }
     }
 }

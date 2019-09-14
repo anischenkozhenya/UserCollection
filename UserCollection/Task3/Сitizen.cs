@@ -9,6 +9,10 @@ namespace Task3
     public abstract class Citizen
     {
         protected int id = 0;
+        public Citizen(int id)
+        {
+            Id = id;
+        }
         public int Id
         {
             get {return id;}
