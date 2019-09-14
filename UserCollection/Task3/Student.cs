@@ -12,5 +12,9 @@ namespace Task3
         {
 
         }
+        public Student(int id, string firstname, string lastname) : base(id, firstname, lastname)
+        {
+
+        }
     }
 }

@@ -37,23 +37,25 @@ namespace Task3
             userCollection.Add(new Student(random.Next()));
             userCollection.Add(new Pensioner(random.Next()));
             userCollection.Add(new Pensioner(random.Next()));
-            Worker worker = new Worker(1000);
+            Worker worker = new Worker(1000, "Виктор", "Анищенко");
             userCollection.Add(worker);
+            Console.WriteLine(worker.FullName);
             userCollection.Add(new Worker(random.Next()));
             userCollection.Add(new Student(random.Next()));
             userCollection.Add(new Student(random.Next()));
             userCollection.Add(new Pensioner(random.Next()));
             userCollection.Add(new Pensioner(random.Next()));
-            userCollection.GetNumberCitizenInCollection(worker);
+            userCollection.Contains(worker,out int index);
             userCollection.Delete(worker);
-            userCollection.Add(new Student(1000));
+            userCollection.Delete();
+            userCollection.Add(new Student(1000));            
+            Console.WriteLine(userCollection.Contains(new Student(1000), out index));
+            Console.WriteLine(userCollection.ReturnLast());
+            Console.WriteLine(userCollection.Count);
             foreach (var item in userCollection)
             {
                 Console.WriteLine(item.GetType());
             }
-            Console.WriteLine(userCollection.Contains(new Student(1000)));
-            Console.WriteLine(userCollection.ReturnLast());
-            Console.WriteLine(userCollection.Count);
             userCollection.Clear();
             foreach (var item in userCollection)
             {
